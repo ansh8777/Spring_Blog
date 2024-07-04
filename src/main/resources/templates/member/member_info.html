@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가입정보</title>
+</head>
+<body>
+    <h3>기본정보</h3>
+    <hr>
+    <div>
+        <span>아이디: </span><span th:text="${basicMemberInfo.id}"></span>
+        <span>이름: </span><span th:text="${basicMemberInfo.name}"></span>
+        <span>생년월일: </span><span th:text="${basicMemberInfo.birth_date}"></span>
+        <span>이메일: </span><span th:text="${basicMemberInfo.email}"></span>
+        <span>등급: </span><span th:text="${basicMemberInfo.grade}"></span>
+        <span>연락처: </span><span th:text="${basicMemberInfo.phone}"></span>
+    </div>
+    <h3>주소</h3>
+    <div th:each="address : ${addressMemberInfo}">
+        <span>주소</span><span th:text="${address.address}"></span><br>
+        <span>상세주소</span><span th:text="${address.addressDetail}"></span><br>
+    </div>
+</body>
+</html>

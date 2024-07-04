@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 수정</title>
+    <link rel="stylesheet" href="/css/insert.css">
+</head>
+<body>
+    <div class="container">
+        <h1>글 수정</h1>
+        <form action="/board/update/action" method="post">
+            <input type="hidden" name="seq" th:value="${resultSet[0]['seq']}">
+            <label for="subject">분류</label>
+            <select id="subject" name="subject" required>
+                <th:block th:each="code : ${codeList}">
+                    <option th:value="${code.CODE_NAME}" th:text="${code.CODE_NAME}"></option>
+                </th:block>
+            </select>
+
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" th:value="${resultSet[0]['title']}" required>
+
+            <label>작성자: <span th:text="${userName}"></span></label>
+
+            <label for="content">내용</label>
+            <textarea id="content" name="content" rows="20" required th:text="${resultSet[0]['content']}"></textarea>
+
+            <button type="submit">등록하기</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,187 @@
+    <!DOCTYPE html>
+    <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>글 상세 페이지</title>
+        <link rel="stylesheet" href="/css/detail.css">
+    </head>
+    <body>
+        <header>
+            <h1><a href="/">KEPCO Digital Bootcamp 3기 커뮤니티</a></h1>
+            <div class="header-buttons" th:if="${session.id} != null">
+                <a href="/member/logout">로그아웃</a>
+                <a href="/member/change">정보변경</a>
+                <div th:if="${session.grade} == 99">
+                    <a href="/admin/list">회원관리</a>
+                </div>
+                <td>
+                    <a th:if="${not #lists.isEmpty(imageSet)}" href="#" onclick="openProfileUploadPopup()">
+                        <img th:src="@{'/images/' + ${imageSet[0].imgName}}" alt="프로필 사진" class="profile-image">
+                    </a>
+                    <a th:if="${#lists.isEmpty(imageSet)}" href="#" onclick="openProfileUploadPopup()">
+                        <img src="/images/default.png" alt="기본 프로필 사진" class="profile-image">
+                    </a>
+                </td>
+                <p>[[${session.name}]]님 안녕하세요.</p>
+            </div>
+            <div class="header-buttons" th:if="${session.id} == null">
+                <a href="/member/login">로그인</a>
+                <a href="/member/register">회원가입</a>
+            </div>
+        </header>
+        <main>
+            <section>
+                <h2>
+                    <span th:text="${resultSet[0].title}">글 제목</span>
+                    <div class="post-buttons" th:if="${currentUserName} == ${resultSet[0].name}">
+                        <form action="/board/update">
+                            <input type="hidden" name="seq_1" th:value="${resultSet[0].seq}">
+                            <button type="submit">수정</button>
+                        </form>
+                        <form action="/board/delete">
+                            <input type="hidden" name="seq" th:value="${resultSet[0].seq}">
+                            <button type="submit">삭제</button>
+                        </form>
+                    </div>
+                    <div th:if="${session.id} != null">
+                        <form action="/board/like" method="post">
+                            <input type="hidden" name="boardId_3" th:value="${resultSet[0].seq}">
+                            <button type="submit">좋아요</button>
+                        </form>
+                        <form action="/board/dlike" method="post">
+                            <input type="hidden" name="boardId_4" th:value="${resultSet[0].seq}">
+                            <button type="submit">싫어요</button>
+                        </form>
+                    </div>
+            </h2>
+                </h2>
+                <div class="post-details">
+                    <div class="post-details-left">
+                        <span th:text="${resultSet[0].name}">작성자</span>
+                        <span th:text="'조회수 ' + ${resultSet[0].search_cnt}">조회 수</span>
+                        <span th:text="'좋아요 ' + ${resultSet[0].like_cnt}">좋아요</span>
+                        <span th:text="'싫어요 ' + ${resultSet[0].dlike_cnt}">싫어요</span>
+                    </div>
+                    <span id="post-date" th:text="${resultSet[0].reg_dt}">작성일자</span>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td th:text="${resultSet[0].content}">내용</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section th:if="${session.id} != null">
+                <form action="/board/comment/insert" method="post">
+                    <input type="hidden" name="id" th:value="${session.id}">
+                    <input type="hidden" name="boardId" th:value="${resultSet[0].seq}">
+                    <textarea name="comment" placeholder="댓글을 입력하세요..." required></textarea>
+                    <button type="submit">댓글 작성</button>
+                </form>
+            </section>
+            <section class="comments-section">
+                <h3>댓글</h3>
+                <div th:each="comment : ${comment}">
+                    <div class="comment">
+                        <input type="hidden" class="seq_a" th:value="${comment.seq}">
+                        <input type="hidden" class="boardId_a" name="boardId_a" th:value="${comment.board_id}">
+                        <div class="comment-details">
+                            <td>
+                                <!-- 이미지 데이터가 있는 경우 -->
+                                <img th:if="${comment.imgName != null}" th:src="@{'/images/' + ${comment.imgName}}" alt="프로필 사진" class="profile-image">
+                                <!-- 이미지 데이터가 없는 경우 -->
+                                <img th:unless="${comment.imgName != null}" src="/images/default.png" alt="기본 프로필 사진" class="profile-image">
+                            </td>
+                            <span th:text="${comment.name}">댓글 작성자</span>
+                            <span class="comment-date" th:text="${comment.reg_dt}">댓글 작성일자</span>
+                        </div>
+                        <div class="comment-content" th:text="${comment.comment}">댓글 내용</div>
+                        <div class="comment-buttons" th:if="${session.id} == ${comment.id}">
+                            <button class="changeButton">수정</button>
+                            <form action="/board/comment/delete" method="post" onsubmit="return confirmDelete();">
+                                <input type="hidden" name="seq_b" th:value="${comment.seq}">
+                                <input type="hidden" name="boardId_b" th:value="${comment.board_id}">
+                                <button type="submit">삭제</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>         
+        </main>
+        <footer>
+            <p>&copy; 2024 안시형. All rights reserved.</p>
+        </footer>
+        <script>
+            document.querySelectorAll('.changeButton').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentDiv = this.closest('.comment');
+                const commentContentDiv = commentDiv.querySelector('.comment-content');
+                const commentText = commentContentDiv.innerHTML;
+                const textarea = document.createElement('textarea');
+
+                textarea.className = 'comment-content';
+                textarea.value = commentText;
+                commentContentDiv.parentNode.replaceChild(textarea, commentContentDiv);
+
+                // 기존 버튼을 숨기고 확인, 취소 버튼을 추가
+                const commentButtonsDiv = commentDiv.querySelector('.comment-buttons');
+                const originalButtonsHTML = commentButtonsDiv.innerHTML;
+                commentButtonsDiv.innerHTML = `
+                    <button class="confirmButton">확인</button>
+                    <button class="cancelButton">취소</button>
+                `;
+
+                commentDiv.querySelector('.confirmButton').addEventListener('click', function() {
+                    const newText = textarea.value;
+                    const seq = commentDiv.querySelector('.seq_a').value;
+                    const boardId = commentDiv.querySelector('.boardId_a').value;
+
+                    // 동적으로 폼을 생성하여 서버로 전송
+                    const form = document.createElement('form');
+                    form.method = 'post';
+                    form.action = '/board/comment/update';
+
+                    const seqInput = document.createElement('input');
+                    seqInput.type = 'hidden';
+                    seqInput.name = 'seq_a';
+                    seqInput.value = seq;
+                    form.appendChild(seqInput);
+
+                    const commentInput = document.createElement('input');
+                    commentInput.type = 'hidden';
+                    commentInput.name = 'comment_a';
+                    commentInput.value = newText;
+                    form.appendChild(commentInput);
+
+                    const boardIdInput = document.createElement('input');
+                    boardIdInput.type = 'hidden';
+                    boardIdInput.name = 'boardId_a';
+                    boardIdInput.value = boardId;
+                    form.appendChild(boardIdInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+
+                commentDiv.querySelector('.cancelButton').addEventListener('click', function() {
+                    // 원래 내용 되돌리기
+                    textarea.parentNode.replaceChild(commentContentDiv, textarea);
+
+                    // 원래 버튼으로 되돌리기
+                    commentButtonsDiv.innerHTML = originalButtonsHTML;
+                });
+            });
+        });
+        
+        function confirmDelete() {
+        return confirm("정말로 삭제하시겠습니까?");
+        }
+
+        function openProfileUploadPopup() {
+            window.open('/profile/upload', 'Profile Upload', 'width=800,height=600');
+        }
+        </script>
+    </body>
+    </html>

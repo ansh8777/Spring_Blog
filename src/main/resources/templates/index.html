@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEPCO 커뮤니티</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">KEPCO Digital Bootcamp 3기 커뮤니티</a></h1>
+        <div class="header-buttons" th:if="${session.id} != null">
+            <a href="/member/logout">로그아웃</a>
+            <a href="" onclick="openPopup('/member/change')">정보변경</a>
+            <div th:if="${session.grade} == 99">
+                <a href="/admin/list">회원관리</a>
+            </div>
+            <!-- <span th:switch="${session.grade}">
+                <span th:case="0"><img src="/image/0_iron.png" alt="아이언"></span>
+                <span th:case="1"><img src="/image/1_bronze.png" alt="브론즈"></span>
+                <span th:case="2"><img src="/image/2_silver.png" alt="실버"></span>
+                <span th:case="3"><img src="/image/3_gold.png" alt="골드"></span>
+                <span th:case="4"><img src="/image/4_platinum.png" alt="플레티넘"></span>
+                <span th:case="5"><img src="/image/5_emerald.png" alt="에메랄드"></span>
+                <span th:case="6"><img src="/image/6_diamond.png" alt="다이아몬드"></span>
+                <span th:case="7"><img src="/image/7_master.png" alt="마스터"></span>
+                <span th:case="8"><img src="/image/8_grandmaster.png" alt="그랜드마스터"></span>
+                <span th:case="9"><img src="/image/9_challenger.png" alt="챌린저"></span>
+                <span th:case="10"><img src="/image/cat1.png" alt="유미"></span>
+                <span th:case="11">
+                    <a href="#" onclick="openProfileUploadPopup()">
+                        <img src="/image/cat2.png" alt="꼬봉">
+                    </a>
+                </span>
+                <span th:case="12"><img src="/image/cat3.png" alt="렝가"></span>
+                <span th:case="13"><img src="/image/sora.png" alt="블룹피쉬"></span>
+                <span th:case="14"><img src="/image/monkey.png" alt="코주부원숭이"></span>
+                <span th:case="15"><img src="/image/yuumi2.png" alt="하잇~"></span>
+                <span th:case="99">
+                    <a href="#" onclick="openProfileUploadPopup()">
+                        <img src="/image/yuumi.png" alt="관리자">
+                    </a>
+                </span>
+            </span> -->
+            <td>
+                <a th:if="${not #lists.isEmpty(imageSet)}" href="#" onclick="openProfileUploadPopup()">
+                    <img th:src="@{'/images/' + ${imageSet[0].imgName}}" alt="프로필 사진" class="profile-image">
+                </a>
+                <a th:if="${#lists.isEmpty(imageSet)}" href="#" onclick="openProfileUploadPopup()">
+                    <img src="/images/default.png" alt="기본 프로필 사진" class="profile-image">
+                </a>
+            </td>
+            <p>[[${session.name}]]님 안녕하세요.</p>
+        </div>
+        <div class="header-buttons" th:if="${session.id} == null">
+            <a href="/member/login">로그인</a>
+            <a href="/member/register">회원가입</a>
+        </div>
+    </header>
+    <main>
+        <section>
+            <div class="header-buttons">
+                <button onclick="location.href='/board/insert'">글쓰기</button>
+            </div>
+            <h2>자유게시판</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>글번호</th>
+                        <th>분류</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>프로필</th>
+                        <th>조회수</th>
+                        <th>댓글수</th>
+                        <th>날짜</th>
+                        <th>👍</th>
+                        <th>👎</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="result : ${resultSet}">
+                        <td th:text="${result.seq}"></td>
+                        <td th:text="${result.subject}"></td>
+                        <td>
+                            <a th:href="@{/board/detail(seq=${result.seq})}" th:text="${result.title}"></a>
+                        </td>
+                        <td th:text="${result.name}"></td>
+                        <td>
+                            <!-- 이미지 데이터가 있는 경우 -->
+                            <img th:if="${result.imgName != null}" th:src="@{'/images/' + ${result.imgName}}" alt="프로필 사진" class="profile-image">
+                            <!-- 이미지 데이터가 없는 경우 -->
+                            <img th:unless="${result.imgName != null}" src="/images/default.png" alt="기본 프로필 사진" class="profile-image">
+                        </td>
+                        <td th:text="${result.search_cnt}"></td>
+                        <td th:text="${result.comment_count}"></td>
+                        <td th:text="${result.reg_dt}"></td>
+                        <td th:text="${result.like_cnt}"></td>
+                        <td th:text="${result.dlike_cnt}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 페이지네이션 -->
+            <div>
+                <ul>
+                    <li th:if="${currentPage > 1}">
+                        <a th:href="@{'/?pageNum=' + (${currentPage} - 1)}">&lt; 이전</a>
+                    </li>
+                    
+                    <li th:each="pageIdx : ${#numbers.sequence(1, totalPages)}">
+                        <span th:if="${pageIdx == currentPage}" th:text="${pageIdx}"></span>
+                        <a th:if="${pageIdx != currentPage}" th:href="@{'/?pageNum=' + ${pageIdx}}" th:text="${pageIdx}"></a>
+                    </li>
+                    
+                    <li th:if="${currentPage < totalPages}">
+                        <a th:href="@{'/?pageNum=' + (${currentPage} + 1)}">다음 &gt;</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 안시형. All rights reserved.</p>
+    </footer>
+    <script>
+        function openPopup(url) {
+            window.open(url, '_blank', 'width=600,height=800');
+            return false; // Prevent default link action
+        }
+
+        function openProfileUploadPopup() {
+            window.open('/profile/upload', 'Profile Upload', 'width=800,height=600');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header h1 {
+    margin: 0;
+    color: #333333;
+}
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+.header-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+section {
+    margin-bottom: 40px;
+}
+section h2 {
+    color: #666666;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.post-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #999999;
+}
+.post-details-left {
+    display: flex;
+    gap: 10px;
+}
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-top: 1px solid #eeeeee;
+}
+footer p {
+    margin: 0;
+    color: #999999;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+th {
+    background-color: #f2f2f2;
+    color: #333333;
+    font-weight: bold;
+}
+td, .comment-content {
+    white-space: pre-wrap;
+}
+td a {
+    color: #007bff;
+    text-decoration: none;
+}
+td a:hover {
+    text-decoration: underline;
+}
+.comments-section {
+    margin-top: 40px;
+}
+.comments-section h3 {
+    color: #666666;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.comment {
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+.comment .comment-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 5px;
+}
+.comment .comment-content {
+    font-size: 14px;
+    color: #333333;
+}
+.comment-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+.comment-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 2px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+header h1 a {
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    color: inherit; /* 기본 링크 색상 유지 */
+}
+.post-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.post-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+/* 기존 CSS에 추가할 내용 */
+.header-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    margin-right: 10px;
+}
+
+.comment img {
+    width: 70px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 5px; /* 이미지와 이름 사이의 간격 */
+}
+.comment-details {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+}
+.comment-details span {
+    margin-top: 5px; /* 이미지와 이름 사이의 간격 */
+}
+
+.profile-image {
+    width: 90px; /* 원하는 너비 */
+    height: auto; /* 높이는 자동으로 조정됩니다 */
+}
